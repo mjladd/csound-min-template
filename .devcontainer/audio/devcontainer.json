@@ -6,7 +6,7 @@
 // configuration there and render to a file instead.
 {
   "name": "csound project (host audio)",
-  "image": "ghcr.io/mjladd/csound-min-workspace:7.0.0-min.4",
+  "image": "ghcr.io/mjladd/csound-min-workspace:7.0.0-min.3",
 
   // --device gives the container the ALSA devices, and the bind mount gives
   // it the socket of the sound server that owns them. This configuration
