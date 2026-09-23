@@ -1,0 +1,9 @@
+# Rendered audio. 'csd render' and 'csd play' write here.
+renders/
+
+# Analysis files. 'csd analyze' makes them again from the samples. Remove
+# this line for a file that takes a long time to make, and commit that file.
+analysis/*.pvx
+analysis/*.cvanal
+analysis/*.het
+analysis/*.lpc

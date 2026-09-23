@@ -1,0 +1,30 @@
+// Development container for a Csound music project.
+//
+// The image holds the csound-min engine, the csd helper and the audio tools.
+// It holds no compiler. Read README.md for the commands.
+{
+  "name": "csound project",
+  "image": "ghcr.io/mjladd/csound-min-workspace:7.0.0-min.3",
+
+  // Csound finds files through these variables, so a piece names a file
+  // without a folder. SSDIR holds sound files, SADIR holds analysis files,
+  // and INCDIR holds the orchestra code that #include names.
+  "remoteEnv": {
+    "SSDIR": "${containerWorkspaceFolder}/samples",
+    "SADIR": "${containerWorkspaceFolder}/analysis",
+    "INCDIR": "${containerWorkspaceFolder}/include"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["kunstmusik.csound-vscode-plugin"],
+      "settings": {
+        "files.associations": {
+          "*.csd": "csound-csd",
+          "*.orc": "csound",
+          "*.sco": "csound-sco"
+        }
+      }
+    }
+  }
+}

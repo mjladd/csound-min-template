@@ -1,0 +1,41 @@
+// Development container for a Csound music project, with the audio hardware
+// of a Linux host. VS Code offers this configuration next to the default one.
+//
+// Pick this one to send audio straight to the speakers with 'csd play' and
+// 'csd live'. It fails to start on macOS and on Windows. Pick the default
+// configuration there and render to a file instead.
+{
+  "name": "csound project (host audio)",
+  "image": "ghcr.io/mjladd/csound-min-workspace:7.0.0-min.3",
+
+  // --device gives the container the ALSA devices, and the bind mount gives
+  // it the socket of the sound server that owns them. This configuration
+  // needs a Linux host that runs PulseAudio or PipeWire.
+  "runArgs": [
+    "--device=/dev/snd",
+    "--group-add=audio",
+    "--volume=${localEnv:XDG_RUNTIME_DIR}/pulse:/run/user/1000/pulse"
+  ],
+
+  // Csound finds files through these variables, so a piece names a file
+  // without a folder. SSDIR holds sound files, SADIR holds analysis files,
+  // and INCDIR holds the orchestra code that #include names.
+  "remoteEnv": {
+    "SSDIR": "${containerWorkspaceFolder}/samples",
+    "SADIR": "${containerWorkspaceFolder}/analysis",
+    "INCDIR": "${containerWorkspaceFolder}/include"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["kunstmusik.csound-vscode-plugin"],
+      "settings": {
+        "files.associations": {
+          "*.csd": "csound-csd",
+          "*.orc": "csound",
+          "*.sco": "csound-sco"
+        }
+      }
+    }
+  }
+}
