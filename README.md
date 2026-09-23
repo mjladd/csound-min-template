@@ -60,14 +60,9 @@ An analysis file comes from a sample. Add the command that makes it to
 script makes, so each clone makes them again. If a file takes a long time to
 make, remove its line from `.gitignore` and commit it.
 
-## Continuous rendering
-
-`.github/workflows/render.yml` renders every file in `pieces/` on each push,
-in the same image. The rendered audio is attached to the run as an artifact.
-
 ## A newer engine
 
-The image tag is in `.devcontainer/devcontainer.json` and in
-`.github/workflows/render.yml`. Change both to a newer tag from
+The image tag is in `.devcontainer/devcontainer.json`, and in the host audio
+configuration next to it. Change it to a newer tag from
 https://github.com/mjladd/csound-min/releases, then run Dev Containers:
 Rebuild Container. Render your pieces again and listen for changes.
