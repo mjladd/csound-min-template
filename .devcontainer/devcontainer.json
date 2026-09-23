@@ -4,7 +4,7 @@
 // It holds no compiler. Read README.md for the commands.
 {
   "name": "csound project",
-  "image": "ghcr.io/mjladd/csound-min-workspace:7.0.0-min.3",
+  "image": "ghcr.io/mjladd/csound-min-workspace:7.0.0-min.4",
 
   // Csound finds files through these variables, so a piece names a file
   // without a folder. SSDIR holds sound files, SADIR holds analysis files,
