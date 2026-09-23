@@ -1,0 +1,68 @@
+# Watches csound-min for a new release and opens a pull request that moves
+# the container image tag.
+#
+# The check runs inside this repository, so it needs no token for the other
+# repository. Run it by hand from the Actions tab to check right away.
+name: engine update
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Open a pull request for a new engine
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ENGINE_REPO: mjladd/csound-min
+        run: |
+          set -euo pipefail
+
+          tag=$(gh release view --repo "$ENGINE_REPO" --json tagName -q .tagName)
+          version=${tag#v}
+          image=ghcr.io/mjladd/csound-min-workspace
+          files=(.devcontainer/devcontainer.json .devcontainer/audio/devcontainer.json)
+
+          if grep -q "$image:$version" "${files[@]}"; then
+              echo "The project already uses $version."
+              exit 0
+          fi
+
+          branch=engine/$version
+          if git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
+              echo "Branch $branch is open already."
+              exit 0
+          fi
+
+          sed -i -E "s#($image:)[^\"]+#\1$version#" "${files[@]}"
+          if git diff --quiet; then
+              echo "Nothing changed. The tag format may differ." >&2
+              exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -am "Move to the $version image"
+          git push -u origin "$branch"
+
+          printf '%s\n' \
+            "csound-min released $tag, so the container image moves to" \
+            "\`$image:$version\`." \
+            "" \
+            "Render your pieces from this branch before you merge, and listen" \
+            "for changes." > /tmp/body.md
+
+          gh pr create --base "$GITHUB_REF_NAME" \
+            --title "Move to the $version image" \
+            --body-file /tmp/body.md
