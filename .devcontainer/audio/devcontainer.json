@@ -28,7 +28,7 @@
 
   "customizations": {
     "vscode": {
-      "extensions": ["kunstmusik.csound-vscode-plugin"],
+      "extensions": ["kunstmusik.csound-vscode-plugin", "vscodevim.vim"],
       "settings": {
         "files.associations": {
           "*.csd": "csound-csd",
